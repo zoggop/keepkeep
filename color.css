@@ -8,8 +8,6 @@ a {
 .DEFAULT {
 	background-color: #ffffff;
 	outline-color: #e0e0e0;
-	outline-width: 1px;
-	outline-style: solid;
 }
 .RED { background-color: #f58b81; }
 .ORANGE { background-color: #ffbb0c; }
@@ -33,8 +31,6 @@ a {
 	.DEFAULT {
 		background-color: #202124;
 		outline-color: #5f6368;
-		outline-width: 1px;
-		outline-style: solid;
 	}
 	.RED { background-color: #5e2b29; }
 	.ORANGE { background-color: #63491a; }
