@@ -55,6 +55,13 @@ def loadAttachments(jsonTxt):
 			print("file not found", a.get('filePath'))
 	return aHtml[:-1]
 
+def loadAnnotations(jsonTxt):
+	list = json.loads(jsonTxt)
+	html = ''
+	for a in list:
+		html += "<div class='annotation'>\n<h4 class='annotationtitle'><a href='{}'>{}</a></h4>\n<p class='annotationdescription'>{}</p>\n</div>\n".format(a.get('url'), a.get('title'), a.get('description'))
+	return html[:-1]
+
 def fetchMonth(yearMonth):
 	cur = conn.cursor()
 	cur.execute("SELECT * FROM NOTES WHERE CREATED BETWEEN '{}-01' AND '{}-31' AND ISARCHIVED = '0' AND ISTRASHED = '0' ORDER BY CREATED ASC".format(yearMonth, yearMonth))
@@ -79,6 +86,8 @@ def generateMonthPage(yearMonth, prevYearMonth, nextYearMonth):
 				v = loadChecklist(v)
 			elif c == 'ATTACHMENTS':
 				v = loadAttachments(v)
+			elif c == 'ANNOTATIONS':
+				v = loadAnnotations(v)
 			noteHtml = noteHtml.replace('%{}%'.format(c), str(v))
 		contentHtml += noteHtml + '\n\n'
 	pageHtml = pageTempl

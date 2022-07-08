@@ -25,6 +25,17 @@ h3 {
 	margin: 1em;
 }
 
+h4 {
+	font-weight: normal;
+	font-style: italic;
+	margin: 0px;
+}
+
+.annotation {
+	padding: 1em;
+	font-size: 0.9em;
+}
+
 .DEFAULT {
 	outline-width: 1px;
 	outline-style: solid;

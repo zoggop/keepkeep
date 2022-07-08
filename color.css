@@ -5,6 +5,7 @@ body {
 a {
 	color: #202124;
 }
+.annotation { outline-color: #e0e0e0; }
 .DEFAULT {
 	background-color: #ffffff;
 	outline-color: #e0e0e0;
