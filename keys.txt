@@ -1,0 +1,12 @@
+Keep
+color
+isTrashed
+isPinned
+isArchived
+textContent
+title
+userEditedTimestampUsec
+createdTimestampUsec
+annotations
+listContent
+attachments

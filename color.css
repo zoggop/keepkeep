@@ -1,0 +1,51 @@
+body {
+	background-color: #c6c6c6;
+}
+
+.DEFAULT {
+	background-color: #b9b9b9;
+}
+
+.RED {
+	background-color: #fca197;
+}
+
+.ORANGE {
+	background-color: #d9b373;
+}
+
+.YELLOW {
+	background-color: #c3bb73;
+}
+
+.GREEN {
+	background-color: #a5c27e;
+}
+
+.TEAL {
+	background-color: #58cbb5;
+}
+
+.BLUE {
+	background-color: #32cae3;
+}
+
+.CERULEAN {
+	background-color: #85bcfe;
+}
+
+.PURPLE {
+	background-color: #cdabee;
+}
+
+.PINK {
+	background-color: #f1a0ce;
+}
+
+.BROWN {
+	background-color: #c9a47c;
+}
+
+.GRAY {
+	background-color: #ababab;
+}
