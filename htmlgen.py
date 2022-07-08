@@ -15,7 +15,7 @@ conn = sqlite3.connect(dbFilepath)
 
 def yearMonthFormat(ym):
 	ymDT = datetime.strptime(ym, "%Y-%m")
-	return ymDT.strftime("%B, %Y")
+	return ymDT.strftime("%B %Y")
 
 def paragrapher(txt):
 	if txt is None:
@@ -25,6 +25,35 @@ def paragrapher(txt):
 	for l in lines:
 		html += "<p>{}</p>\n".format(l)
 	return html[:-1]
+
+def loadChecklist(jsonTxt):
+	cList = json.loads(jsonTxt)
+	cHtml = "<ul>\n"
+	for c in cList:
+		check = '&#9744;'
+		if c.get('isChecked') == True:
+			check = '&#9745;'
+		cHtml += "<li>{} {}</li>\n".format(check, c.get('text'))
+	return cHtml[:-1]
+
+def loadAttachments(jsonTxt):
+	aList = json.loads(jsonTxt)
+	aHtml = ''
+	for a in aList:
+		imgFilename = a.get('filePath')
+		ext = imgFilename.split('.')[-1]						
+		ei = 0
+		while not os.path.exists(takeoutPath + '/' + imgFilename) and ei < len(imgExts):
+			newExt = imgExts[ei]
+			parts = imgFilename.split('.')
+			imgFilename = '.'.join(parts[:-1]) + newExt
+			ei += 1
+		if os.path.exists(takeoutPath + '/' + imgFilename):
+			copy2(takeoutPath + '/' + imgFilename, basePath + '/' + imgFilename)
+			aHtml += "<img src='{}'>\n".format(imgFilename)
+		else:
+			print("file not found", a.get('filePath'))
+	return aHtml[:-1]
 
 def fetchMonth(yearMonth):
 	cur = conn.cursor()
@@ -46,25 +75,10 @@ def generateMonthPage(yearMonth, prevYearMonth, nextYearMonth):
 				v = dt.strftime("%A %#d, %I:%M %p")
 			elif c == 'TEXTCONTENT':
 				v = paragrapher(v)
+			elif c == 'LISTCONTENT':
+				v = loadChecklist(v)
 			elif c == 'ATTACHMENTS':
-				aList = json.loads(v)
-				aHtml = ''
-				for a in aList:
-					imgFilename = a.get('filePath')
-					ext = imgFilename.split('.')[-1]						
-					ei = 0
-					while not os.path.exists(takeoutPath + '/' + imgFilename) and ei < len(imgExts):
-						newExt = imgExts[ei]
-						parts = imgFilename.split('.')
-						imgFilename = '.'.join(parts[:-1]) + newExt
-						print(imgFilename)
-						ei += 1
-					if os.path.exists(takeoutPath + '/' + imgFilename):
-						copy2(takeoutPath + '/' + imgFilename, basePath + '/' + imgFilename)
-						aHtml += "<img src='{}'>\n".format(imgFilename)
-					else:
-						print("file not found", a.get('filePath'))
-				v = aHtml
+				v = loadAttachments(v)
 			noteHtml = noteHtml.replace('%{}%'.format(c), str(v))
 		contentHtml += noteHtml + '\n\n'
 	pageHtml = pageTempl
