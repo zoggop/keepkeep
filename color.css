@@ -19,6 +19,7 @@ a {
 .PURPLE { background-color: #d6affa; }
 .PINK { background-color: #fecfe8; }
 .BROWN { background-color: #e8c9a8; }
+.GRAY { background-color: #e8eaed; }
 
 @media (prefers-color-scheme: dark) {
 	body {
@@ -42,4 +43,5 @@ a {
 	.PURPLE { background-color: #41285e; }
 	.PINK { background-color: #5c2345; }
 	.BROWN { background-color: #452f19; }
+	.GRAY { background-color: #3c3f43; }
 }
