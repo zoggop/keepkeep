@@ -70,6 +70,7 @@ def fetchMonth(yearMonth):
 def generateMonthPage(yearMonth, prevYearMonth, nextYearMonth):
 	rows = fetchMonth(yearMonth)
 	contentHtml = ''
+	wordCount, noteCount = 0, 0
 	for r in rows:
 		noteHtml = noteTempl
 		for ci in range(0, len(columns)):
@@ -79,8 +80,9 @@ def generateMonthPage(yearMonth, prevYearMonth, nextYearMonth):
 				v = ''
 			elif c == 'CREATED' or c == 'EDITED':
 				dt = datetime.strptime(v, "%Y-%m-%d %H:%M:%S")
-				v = dt.strftime("%A %#d, %I:%M %p")
+				v = dt.strftime("%A, %B %#d, %Y, %#I:%M %p")
 			elif c == 'TEXTCONTENT':
+				wordCount += len(v.split())
 				v = paragrapher(v)
 			elif c == 'LISTCONTENT':
 				v = loadChecklist(v)
@@ -90,6 +92,7 @@ def generateMonthPage(yearMonth, prevYearMonth, nextYearMonth):
 				v = loadAnnotations(v)
 			noteHtml = noteHtml.replace('%{}%'.format(c), str(v))
 		contentHtml += noteHtml + '\n\n'
+		noteCount += 1
 	pageHtml = pageTempl
 	pageHtml = pageHtml.replace('%CONTENT%', contentHtml)
 	pageHtml = pageHtml.replace('%DATERANGE%', yearMonthFormat(yearMonth))
@@ -101,6 +104,7 @@ def generateMonthPage(yearMonth, prevYearMonth, nextYearMonth):
 		pageHtml = pageHtml.replace('%NEXTDATE%', yearMonthFormat(nextYearMonth))
 	with open('{}/{}.html'.format(basePath, yearMonth), 'w', encoding='utf-8') as write_file:
 		write_file.write(pageHtml)
+	return { 'words': wordCount, 'notes': noteCount }
 
 with open('note-template.html', "r") as read_file:
 	noteTempl = read_file.read()
@@ -132,7 +136,8 @@ for mi in range(0, len(monthList)):
 		pym = monthList[mi-1]
 	if mi != len(monthList)-1:
 		nym = monthList[mi+1]
-	generateMonthPage(ym, pym, nym)
+	stats = generateMonthPage(ym, pym, nym)
+	print(ym, stats)
 
 copy2('style.css', basePath + '/style.css')
 copy2('color.css', basePath + '/color.css')

@@ -1,10 +1,6 @@
 body {
-	font-family: Open Sans, DejaVu Sans, sans-serif;
+	font-family: Roboto, Open Sans, DejaVu Sans, Arial, sans-serif;
 	line-height: 1.5em;
-}
-
-a {
-
 }
 
 img {
@@ -27,7 +23,6 @@ h3 {
 
 h4 {
 	font-weight: normal;
-	font-style: italic;
 	margin: 0px;
 }
 

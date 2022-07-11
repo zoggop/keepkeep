@@ -1,48 +1,48 @@
 body {
-	background-color: #ffffff;
-	color: #202124;
+	background-color: #fcfcfc;
+	color: #5c5c5c;
 }
 a {
-	color: #202124;
+	color: #5c5c5c;
 }
 .annotation { outline-color: #e0e0e0; }
 .DEFAULT {
-	background-color: #ffffff;
-	outline-color: #e0e0e0;
+	background-color: #fcfcfc;
+	outline-color: #c6c6c6;
 }
-.RED { background-color: #f58b81; }
-.ORANGE { background-color: #ffbb0c; }
-.YELLOW { background-color: #fff377; }
-.GREEN { background-color: #cefe92; }
-.TEAL { background-color: #a3ffeb; }
-.BLUE { background-color: #c9f0f8; }
-.CERULEAN { background-color: #aaccfa; }
-.PURPLE { background-color: #d6affa; }
-.PINK { background-color: #fecfe8; }
-.BROWN { background-color: #e8c9a8; }
-.GRAY { background-color: #e8eaed; }
+.RED { background-color: #faafa8; }
+.ORANGE { background-color: #f39f76; }
+.YELLOW { background-color: #fff8b8; }
+.GREEN { background-color: #e2f6d3; }
+.TEAL { background-color: #b4ddd3; }
+.BLUE { background-color: #d4e4ed; }
+.CERULEAN { background-color: #aeccdc; }
+.PURPLE { background-color: #d3bfdb; }
+.PINK { background-color: #f6e2dd; }
+.BROWN { background-color: #e9e3d4; }
+.GRAY { background-color: #efeff1; }
 
 @media (prefers-color-scheme: dark) {
 	body {
-		background-color: #202124;
-		color: #e8eaed;
+		background-color: #1b1b1b;
+		color: #e1e1e1;
 	}
 	a {
-		color: #e8eaed;
+		color: #e1e1e1;
 	}
 	.DEFAULT {
-		background-color: #202124;
-		outline-color: #5f6368;
+		background-color: #1b1b1b;
+		outline-color: #757575;
 	}
-	.RED { background-color: #5e2b29; }
-	.ORANGE { background-color: #63491a; }
-	.YELLOW { background-color: #655c1a; }
-	.GREEN { background-color: #345821; }
-	.TEAL { background-color: #10504b; }
-	.BLUE { background-color: #29555e; }
-	.CERULEAN { background-color: #173b5f; }
-	.PURPLE { background-color: #41285e; }
-	.PINK { background-color: #5c2345; }
-	.BROWN { background-color: #452f19; }
-	.GRAY { background-color: #3c3f43; }
+	.RED { background-color: #76172d; }
+	.ORANGE { background-color: #692a18; }
+	.YELLOW { background-color: #7c4a03; }
+	.GREEN { background-color: #264d3b; }
+	.TEAL { background-color: #0c635d; }
+	.BLUE { background-color: #256476; }
+	.CERULEAN { background-color: #274255; }
+	.PURPLE { background-color: #482e5b; }
+	.PINK { background-color: #6d394f; }
+	.BROWN { background-color: #4b443a; }
+	.GRAY { background-color: #232428; }
 }
