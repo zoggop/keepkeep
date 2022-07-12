@@ -14,6 +14,8 @@ imgExts = ['.jpg', '.png']
 
 colorOrder = ['DEFAULT', 'RED', 'ORANGE', 'YELLOW', 'GREEN', 'TEAL', 'BLUE', 'CERULEAN', 'PURPLE', 'PINK', 'BROWN', 'GRAY']
 
+maxMonthlyWordCount = 0
+
 conn = sqlite3.connect(dbFilepath)
 
 def yearMonthFormat(ym):
@@ -71,6 +73,7 @@ def fetchMonth(yearMonth):
 	return cur.fetchall()
 
 def generateMonthPage(yearMonth, prevYearMonth, nextYearMonth):
+	global maxMonthlyWordCount
 	rows = fetchMonth(yearMonth)
 	contentHtml = ''
 	wordCount, noteCount = 0, 0
@@ -104,6 +107,8 @@ def generateMonthPage(yearMonth, prevYearMonth, nextYearMonth):
 		colorWords[color] = (colorWords.get(color) or 0) + words
 		contentHtml += noteHtml + '\n\n'
 		noteCount += 1
+	if wordCount > maxMonthlyWordCount:
+		maxMonthlyWordCount = wordCount
 	pageHtml = pageTempl
 	pageHtml = pageHtml.replace('%CONTENT%', contentHtml)
 	pageHtml = pageHtml.replace('%DATERANGE%', yearMonthFormat(yearMonth))
@@ -130,7 +135,7 @@ def generateOverviewPage(years, stats):
 			for color in colorOrder:
 				count = colorCount.get(color)
 				if not count is None:
-					blocks = ceil((count / stats.get(ym).get('words')) * 50)
+					blocks = ceil((count / maxMonthlyWordCount) * 100)
 					colorChart += '<td class="count {}">{}</td>'.format(color, '-' * blocks)
 			colorChart += '</tr></table>'
 			contHtml += '<tr class="overviewmonth">\n<td><h3><a href="{}.html">{}</a></h3></td>\n<td>{:,} words</td>\n<td>{:,} notes</td>\n<td>{}</td>\n</tr>\n'.format(ym, mname, stats.get(ym).get('words'), stats.get(ym).get('notes'), colorChart)
