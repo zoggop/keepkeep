@@ -106,10 +106,27 @@ def generateMonthPage(yearMonth, prevYearMonth, nextYearMonth):
 		write_file.write(pageHtml)
 	return { 'words': wordCount, 'notes': noteCount }
 
+def generateOverviewPage(years, stats):
+	contHtml = '<table class="overviewtable">\n'
+	for y in years.keys():
+		contHtml += '<tr class="overviewyear">\n<td><h2>{}</h2></td>\n</tr>\n'.format(y)
+		for ym in years[y]:
+			dt = datetime.strptime(ym, "%Y-%m")
+			mname = dt.strftime("%B")
+			contHtml += '<tr class="overviewmonth">\n<td><h3><a href="{}.html">{}</a></h3></td>\n<td>{:,} words</td>\n<td>{:,} notes</td>\n</tr>\n'.format(ym, mname, stats.get(ym).get('words'), stats.get(ym).get('notes'))
+	contHtml += '</table>'
+	html = overTempl
+	html = html.replace('%CONTENT%', contHtml)
+	with open('{}/index.html'.format(basePath), 'w', encoding='utf-8') as write_file:
+		write_file.write(html)
+
+
 with open('note-template.html', "r") as read_file:
 	noteTempl = read_file.read()
 with open('page-template.html', "r") as read_file:
 	pageTempl = read_file.read()
+with open('overview-template.html', "r") as read_file:
+	overTempl = read_file.read()
 
 cur = conn.cursor()
 data = cur.execute("SELECT * FROM NOTES")
@@ -121,13 +138,19 @@ cur = conn.cursor()
 cur.execute("SELECT CREATED FROM NOTES WHERE ISARCHIVED = '0' AND ISTRASHED = '0' ORDER BY CREATED ASC")
 rows = cur.fetchall()
 months = {}
+years = {}
 for r in rows:
 	ym = r[0][:7]
+	y = int(r[0][:4])
 	months[ym] = True
+	years[y] = []
 monthList = []
 for ym in months.keys():
 	monthList.append(ym)
+	y = int(ym[:4])
+	years[y].append(ym)
 
+stats = {}
 for mi in range(0, len(monthList)):
 	ym = monthList[mi]
 	pym = None
@@ -136,8 +159,9 @@ for mi in range(0, len(monthList)):
 		pym = monthList[mi-1]
 	if mi != len(monthList)-1:
 		nym = monthList[mi+1]
-	stats = generateMonthPage(ym, pym, nym)
-	print(ym, stats)
+	stats[ym] = generateMonthPage(ym, pym, nym)
+
+generateOverviewPage(years, stats)
 
 copy2('style.css', basePath + '/style.css')
 copy2('color.css', basePath + '/color.css')
