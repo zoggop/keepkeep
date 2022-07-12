@@ -5,6 +5,7 @@ body {
 a {
 	color: #5c5c5c;
 }
+.colorchart { outline-color: #e0e0e0; }
 .annotation { outline-color: #e0e0e0; }
 .DEFAULT {
 	background-color: #fcfcfc;
@@ -30,6 +31,8 @@ a {
 	a {
 		color: #e1e1e1;
 	}
+	.colorchart { outline-color: #757575; }
+	.annotation { outline-color: #757575; }
 	.DEFAULT {
 		background-color: #1b1b1b;
 		outline-color: #757575;

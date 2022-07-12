@@ -67,3 +67,18 @@ h4 {
 .overviewmonth h3 {
 	margin: 0em;
 }
+
+.colorchart {
+	border-collapse: collapse;
+	outline-style: solid;
+	outline-width: 1px;
+}
+
+.colorchart td {
+	padding: 0em;
+	outline-style: none;
+}
+
+.count {
+	color: rgba(0, 0, 0, 0);
+}
