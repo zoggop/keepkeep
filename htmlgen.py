@@ -50,7 +50,6 @@ def loadAttachments(jsonTxt):
 	aList = json.loads(jsonTxt)
 	aHtml = ''
 	zf = zipfile.ZipFile(takeoutZip, 'r')
-	# with zipfile.ZipFile(takeoutZip, 'r') as zf:
 	for a in aList:
 		imgFilename = a.get('filePath')
 		ext = imgFilename.split('.')[-1]						
