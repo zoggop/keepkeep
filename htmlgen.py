@@ -1,14 +1,19 @@
 import os
+import sys
 import pathlib
 import sqlite3
 import json
+import zipfile
 from shutil import copy2
 from datetime import datetime
 from math import ceil
 
+if len(sys.argv) < 2:
+	exit()
+takeoutZip = sys.argv[1]
+
 basePath = os.path.expanduser('~/keepkeep')
 dbFilepath = basePath + '/keepkeep.db'
-takeoutPath = os.path.expanduser('~/Documents/takeout/Keep')
 
 imgExts = ['.jpg', '.png']
 
@@ -44,17 +49,25 @@ def loadChecklist(jsonTxt):
 def loadAttachments(jsonTxt):
 	aList = json.loads(jsonTxt)
 	aHtml = ''
+	zf = zipfile.ZipFile(takeoutZip, 'r')
+	# with zipfile.ZipFile(takeoutZip, 'r') as zf:
 	for a in aList:
 		imgFilename = a.get('filePath')
 		ext = imgFilename.split('.')[-1]						
 		ei = 0
-		while not os.path.exists(takeoutPath + '/' + imgFilename) and ei < len(imgExts):
+		while not zipfile.Path(zf, 'Takeout/Keep/' + imgFilename).exists() and ei < len(imgExts):
 			newExt = imgExts[ei]
 			parts = imgFilename.split('.')
 			imgFilename = '.'.join(parts[:-1]) + newExt
 			ei += 1
-		if os.path.exists(takeoutPath + '/' + imgFilename):
-			copy2(takeoutPath + '/' + imgFilename, basePath + '/' + imgFilename)
+		if zipfile.Path(zf, 'Takeout/Keep/' + imgFilename).exists():
+			p = zipfile.Path(zf, 'Takeout/Keep/' + imgFilename)
+			print(p)
+			with zipfile.ZipFile(takeoutZip, 'r') as zzf:
+				with zzf.open('Takeout/Keep/' + imgFilename) as myfile:
+					b = myfile.read()
+			with open(basePath + '/' + imgFilename, 'wb') as binary_file:
+				binary_file.write(b)
 			aHtml += "<img src='{}'>\n".format(imgFilename)
 		else:
 			print("file not found", a.get('filePath'))
