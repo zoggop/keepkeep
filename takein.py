@@ -20,6 +20,7 @@ imgExts = ['.jpg', '.png']
 colorOrder = ['DEFAULT', 'RED', 'ORANGE', 'YELLOW', 'GREEN', 'TEAL', 'BLUE', 'CERULEAN', 'PURPLE', 'PINK', 'BROWN', 'GRAY']
 
 maxMonthlyWordCount = 0
+copiedAttachmentsCount = 0
 
 conn = sqlite3.connect(dbFilepath)
 
@@ -47,12 +48,12 @@ def loadChecklist(jsonTxt):
 	return cHtml[:-1]
 
 def loadAttachments(jsonTxt):
+	global copiedAttachmentsCount
 	aList = json.loads(jsonTxt)
 	aHtml = ''
 	zf = zipfile.ZipFile(takeoutZip, 'r')
 	for a in aList:
 		imgFilename = a.get('filePath')
-		ext = imgFilename.split('.')[-1]						
 		ei = 0
 		while not zipfile.Path(zf, 'Takeout/Keep/' + imgFilename).exists() and ei < len(imgExts):
 			newExt = imgExts[ei]
@@ -61,13 +62,18 @@ def loadAttachments(jsonTxt):
 			ei += 1
 		if zipfile.Path(zf, 'Takeout/Keep/' + imgFilename).exists():
 			p = zipfile.Path(zf, 'Takeout/Keep/' + imgFilename)
-			print(p)
+			print('.', end='', flush=True)
 			with zipfile.ZipFile(takeoutZip, 'r') as zzf:
 				with zzf.open('Takeout/Keep/' + imgFilename) as myfile:
 					b = myfile.read()
 			with open(basePath + '/' + imgFilename, 'wb') as binary_file:
 				binary_file.write(b)
-			aHtml += "<img src='{}'>\n".format(imgFilename)
+			ext = imgFilename.split('.')[-1]
+			if ext == '3gp':
+				aHtml += '<video controls><source src="{}" type="video/3gpp"></video>\n'.format(imgFilename)
+			else:
+				aHtml += "<img src='{}'>\n".format(imgFilename)
+			copiedAttachmentsCount += 1
 		else:
 			print("file not found", a.get('filePath'))
 	return aHtml[:-1]
@@ -210,6 +216,7 @@ def importNotesFromZip():
 				conn.execute(sql)
 				i += 1
 	conn.commit()
+	print("{} notes imported to db".format(i))
 
 resetNotesTable()
 importNotesFromZip()
@@ -260,3 +267,5 @@ copy2('style.css', basePath + '/style.css')
 copy2('color.css', basePath + '/color.css')
 
 conn.close()
+
+print('\n{} attachment files copied'.format(copiedAttachmentsCount))
